@@ -40,16 +40,19 @@ def main():
             super(Denoiser, self).__init__()
             # Encoder
             self.encoder = nn.Sequential(
-                nn.Conv2d(1, 16, 3, stride=2, padding=1),  # -> 16x14x14
-                nn.ReLU(),
-                nn.Conv2d(16, 32, 3, stride=2, padding=1), # -> 32x7x7
-                nn.ReLU()
+                nn.Conv2d(1, 16, 3, stride=2, padding=1),
+                nn.BatchNorm2d(16),
+                nn.LeakyReLU(0.1),
+                nn.Conv2d(16, 32, 3, stride=2, padding=1),
+                nn.BatchNorm2d(32),
+                nn.LeakyReLU(0.1)
             )
             # Decoder
             self.decoder = nn.Sequential(
-                nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1), # -> 16x14x14
-                nn.ReLU(),
-                nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1),  # -> 1x28x28
+                nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),
+                nn.BatchNorm2d(16),
+                nn.LeakyReLU(0.1),
+                nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1),
                 nn.Sigmoid()
             )
 
